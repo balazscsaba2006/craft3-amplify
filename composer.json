@@ -8,7 +8,9 @@
     "craftcms",
     "craft-plugin",
     "AMP",
-    "amplify"
+    "amplify",
+    "Craft amp",
+    "Craft accelerated mobile pages"
   ],
   "support": {
     "email": "csaba.balazs@humandirect.eu",
