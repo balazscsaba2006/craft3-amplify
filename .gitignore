@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-workspace
+*.sublime-project
+.idea
+_notes
+dwsync.xml
+logs/*
+vendor
+composer.lock

@@ -1,0 +1,52 @@
+{
+  "name": "balazscsaba2006/amplify",
+  "description": "Twig filter for the Craft CMS 3 to optimize rich text content for Google AMP.",
+  "type": "craft-plugin",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "AMP",
+    "amplify"
+  ],
+  "support": {
+    "email": "csaba.balazs@humandirect.eu",
+    "issues": "https://github.com/balazscsaba2006/craft3-amplify/issues?state=open",
+    "source": "https://github.com/balazscsaba2006/craft3-amplify",
+    "docs": "https://github.com/balazscsaba2006/craft3-amplify"
+  },
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Human Direct",
+      "homepage": "https://humandirect.eu"
+    }
+  ],
+  "require": {
+    "craftcms/cms": "^3.0.0",
+    "fasterimage/fasterimage": "~1.2"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "src/lib/simple_html_dom.php"
+    ],
+    "psr-4": {
+      "humandirect\\amplify\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Amplify",
+    "handle": "amplify",
+    "hasCpSettings": false,
+    "hasCpSection": false,
+    "changelogUrl": "https://raw.githubusercontent.com/balazscsaba2006/craft3-amplify/master/CHANGELOG.md",
+    "class": "humandirect\\amplify\\Amplify"
+  }
+}
