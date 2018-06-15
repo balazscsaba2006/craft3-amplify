@@ -29,6 +29,9 @@
     "craftcms/cms": "^3.0.0",
     "fasterimage/fasterimage": "~1.2"
   },
+  "require-dev": {
+    "codeception/codeception": "~2.3.3"
+  },
   "repositories": [
     {
       "type": "composer",
@@ -41,6 +44,11 @@
     ],
     "psr-4": {
       "humandirect\\amplify\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "humandirect\\amplify\\tests\\": "tests/"
     }
   },
   "extra": {
