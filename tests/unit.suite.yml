@@ -5,9 +5,5 @@
 actor: UnitTester
 modules:
     enabled:
-        - Yii2:
-            part: init
-            cleanup: false # don't wrap test in transaction
-            entryScript: index-test.php
         - Asserts
         - \Helper\Unit
