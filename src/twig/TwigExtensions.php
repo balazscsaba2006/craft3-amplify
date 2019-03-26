@@ -128,7 +128,8 @@ class TwigExtensions extends \Twig_Extension
                         continue;
                     }
 
-                    [$width, $height] = $size;
+                    $width = $size[0];
+                    $height = $size[1];
 
                     // no dimensions should remove this image from DOM permanently
                     if (!$width || !$height) {
@@ -154,7 +155,8 @@ class TwigExtensions extends \Twig_Extension
 
                 // read dimensions from image resource
                 if ($size = $this->readImageSize($src)) {
-                    [$width, $height] = $size;
+                    $width = $size[0];
+                    $height = $size[1];
 
                     $this->setImageSize($img, $width, $height);
                     continue;
@@ -226,7 +228,7 @@ class TwigExtensions extends \Twig_Extension
      *
      * @return string|null
      */
-    private function readImageSize(string $url): ?array
+    private function readImageSize(string $url)
     {
         $client = new FasterImage();
 
