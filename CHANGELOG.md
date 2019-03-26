@@ -15,3 +15,7 @@
 ## 1.0.3 - 2018-07-06
 ### Fixed
 - Downgraded to PHP 7.0
+
+## 1.0.4 - 2019-03-26
+### Fixed
+- Refactored Twig extension logic to work on older versions of PHP 7
