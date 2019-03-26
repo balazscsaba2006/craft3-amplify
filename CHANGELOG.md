@@ -16,6 +16,7 @@
 ### Fixed
 - Downgraded to PHP 7.0
 
-## 1.0.4 - 2019-03-26
+## 1.0.5 - 2019-03-26
 ### Fixed
+- Ensure version number matches Git tags
 - Refactored Twig extension logic to work on older versions of PHP 7
