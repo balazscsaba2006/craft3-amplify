@@ -226,7 +226,7 @@ class TwigExtensions extends \Twig_Extension
      *
      * @return string|null
      */
-    private function readImageSize(string $url): ?array
+    private function readImageSize(string $url)
     {
         $client = new FasterImage();
 
