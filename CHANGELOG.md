@@ -20,3 +20,7 @@
 ### Fixed
 - Ensure version number matches Git tags
 - Refactored Twig extension logic to work on older versions of PHP 7
+
+## 1.0.5 - 2019-04-18
+### Fixed
+- Remove return type on Twig Extension because it caused issues in some PHP environments

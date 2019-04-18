@@ -218,7 +218,7 @@ class TwigExtensions extends \Twig_Extension
      * @param int    $height
      * @param int    $expire | Defaults to 604800 (1 week)
      */
-    private function cacheImageSize($key, $width, $height, $expire = 604800): void
+    private function cacheImageSize($key, $width, $height, $expire = 604800)
     {
         \Craft::$app->cache->set(hash('crc32', $key), [$width, $height], $expire);
     }
