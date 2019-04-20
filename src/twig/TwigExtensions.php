@@ -128,7 +128,8 @@ class TwigExtensions extends \Twig_Extension
                         continue;
                     }
 
-                    [$width, $height] = $size;
+                    $width = $size[0];
+                    $height = $size[1];
 
                     // no dimensions should remove this image from DOM permanently
                     if (!$width || !$height) {
@@ -154,7 +155,8 @@ class TwigExtensions extends \Twig_Extension
 
                 // read dimensions from image resource
                 if ($size = $this->readImageSize($src)) {
-                    [$width, $height] = $size;
+                    $width = $size[0];
+                    $height = $size[1];
 
                     $this->setImageSize($img, $width, $height);
                     continue;
@@ -216,7 +218,7 @@ class TwigExtensions extends \Twig_Extension
      * @param int    $height
      * @param int    $expire | Defaults to 604800 (1 week)
      */
-    private function cacheImageSize($key, $width, $height, $expire = 604800): void
+    private function cacheImageSize($key, $width, $height, $expire = 604800)
     {
         \Craft::$app->cache->set(hash('crc32', $key), [$width, $height], $expire);
     }

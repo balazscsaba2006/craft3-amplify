@@ -15,3 +15,12 @@
 ## 1.0.3 - 2018-07-06
 ### Fixed
 - Downgraded to PHP 7.0
+
+## 1.0.5 - 2019-03-26
+### Fixed
+- Ensure version number matches Git tags
+- Refactored Twig extension logic to work on older versions of PHP 7
+
+## 1.0.6 - 2019-04-18
+### Fixed
+- Remove return type on Twig Extension because it caused issues in some PHP environments
