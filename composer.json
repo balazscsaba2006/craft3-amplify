@@ -1,5 +1,5 @@
 {
-  "name": "trendyminds/amplify",
+  "name": "balazscsaba2006/amplify",
   "description": "Twig filter for the Craft CMS 3 to optimize rich text content for Google AMP.",
   "type": "craft-plugin",
   "keywords": [
