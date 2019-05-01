@@ -83,8 +83,8 @@ class TwigExtensions extends \Twig_Extension
             $tmpSrc = $src = $source[1];
 
             if ($src && $parsed = parse_url($src)) {
-                if (array_key_exists('scheme', $parsed) && 'https' !== $parsed['scheme']) {
-                    $tmpSrc = str_replace($parsed['scheme'], 'https://', $tmpSrc);
+                if (array_key_exists('scheme', $parsed) && 'https://' !== $parsed['scheme']) {
+                    $tmpSrc = str_replace($parsed['scheme'], 'https', $tmpSrc);
                 } else {
                     $tmpSrc = sprintf('https://%s', implode('', $parsed));
                 }
