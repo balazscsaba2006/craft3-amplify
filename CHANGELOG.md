@@ -24,3 +24,7 @@
 ## 1.0.6 - 2019-04-18
 ### Fixed
 - Remove return type on Twig Extension because it caused issues in some PHP environments
+
+## 1.0.7 - 2019-05-02
+### Fixed
+- Amp-Iframe https://https appending extra https fix
