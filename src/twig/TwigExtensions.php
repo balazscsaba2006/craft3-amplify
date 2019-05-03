@@ -55,6 +55,15 @@ class TwigExtensions extends \Twig_Extension
         // strips out stuff in brackets
         $html = preg_replace('#\s*\[.+\]\s*#U', ' ', $html);
 
+        // strips out align tags
+        $html = preg_replace('/align="[^"]*"|align/', ' ', $html);
+
+        // strips out hspace and vspace tags
+        $html = preg_replace('/hspace="[^"]*"|hspace|vspace="[^"]*"|vspace/', ' ', $html);
+
+        // strips out allowfullscreen and allowtransparency tags
+        $html = preg_replace('/allowfullscreen="[^"]*"|allowfullscreen|allowtransparency="[^"]*"|allowtransparency/', ' ', $html);
+
         // removes empty paragraphs
         $pattern = "/<p[^>]*><\\/p[^>]*>/";
         $html = preg_replace($pattern, '', $html);

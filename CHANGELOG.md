@@ -28,3 +28,7 @@
 ## 1.0.7 - 2019-05-02
 ### Fixed
 - Amp-Iframe https://https appending extra https fix
+
+## 1.0.8 - 2019-05-03
+### Fixed
+- Filter unsuported tags [align, hspace, vspace, allowfullscreen, allowtransparency]
