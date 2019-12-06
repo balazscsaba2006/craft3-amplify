@@ -126,57 +126,63 @@ class TwigExtensions extends \Twig_Extension
 
             foreach ($dom->find('img') as $key => $img) {
                 $src = $img->src;
-                // remove auto-generated asset transform param
-                $src = preg_replace('~(\?|&)x=[^&]*~', '$1', $src);
 
-                // try dimensions from cache
-                $cacheKey = hash('crc32', $src);
-                if (\Craft::$app->cache->offsetGet($cacheKey)) {
-                    $size = \Craft::$app->cache->get($cacheKey);
-                    if (!$size) {
+                if (!isset($src) || !$src) {
+                    $html = preg_replace('/<img(.*?)>/', '', $dom);
+                } else {
+
+                    // remove auto-generated asset transform param
+                    $src = preg_replace('~(\?|&)x=[^&]*~', '$1', $src);
+
+                    // try dimensions from cache
+                    $cacheKey = hash('crc32', $src);
+                    if (\Craft::$app->cache->offsetGet($cacheKey)) {
+                        $size = \Craft::$app->cache->get($cacheKey);
+                        if (!$size) {
+                            continue;
+                        }
+
+                        $width = $size[0];
+                        $height = $size[1];
+
+                        // no dimensions should remove this image from DOM permanently
+                        if (!$width || !$height) {
+                            $cropKey = $cacheKey;
+                            $img->outertext = 'CROPSTART' . $cropKey . $img->outertext . 'CROPEND' . $cropKey;
+                            $cropKeys[] = $cropKey;
+                            continue;
+                        }
+
+                        $this->setImageSize($img, $width, $height, false);
                         continue;
                     }
 
-                    $width = $size[0];
-                    $height = $size[1];
+                    // read dimensions from image element
+                    $displaySize = $img->get_display_size();
+                    $width = $displaySize['width'];
+                    $height = $displaySize['height'];
 
-                    // no dimensions should remove this image from DOM permanently
-                    if (!$width || !$height) {
-                        $cropKey = $cacheKey;
-                        $img->outertext = 'CROPSTART' . $cropKey . $img->outertext . 'CROPEND' . $cropKey;
-                        $cropKeys[] = $cropKey;
+                    if ($width > 0 && $height > 0) {
+                        $this->setImageSize($img, $width, $height);
                         continue;
                     }
 
-                    $this->setImageSize($img, $width, $height, false);
-                    continue;
+                    // read dimensions from image resource
+                    if ($size = $this->readImageSize($src)) {
+                        $width = $size[0];
+                        $height = $size[1];
+
+                        $this->setImageSize($img, $width, $height);
+                        continue;
+                    }
+
+                    $cropKey = $cacheKey;
+                    $img->outertext = 'CROPSTART' . $cropKey . $img->outertext . 'CROPEND' . $cropKey;
+                    $cropKeys[] = $cropKey;
+
+                    // cache image dimensions to null, so it will be removed permanently from the DOM
+                    $this->cacheImageSize($src, null, null);
                 }
-
-                // read dimensions from image element
-                $displaySize = $img->get_display_size();
-                $width = $displaySize['width'];
-                $height = $displaySize['height'];
-
-                if ($width > 0 && $height > 0) {
-                    $this->setImageSize($img, $width, $height);
-                    continue;
-                }
-
-                // read dimensions from image resource
-                if ($size = $this->readImageSize($src)) {
-                    $width = $size[0];
-                    $height = $size[1];
-
-                    $this->setImageSize($img, $width, $height);
-                    continue;
-                }
-
-                $cropKey = $cacheKey;
-                $img->outertext = 'CROPSTART' . $cropKey . $img->outertext . 'CROPEND' . $cropKey;
-                $cropKeys[] = $cropKey;
-
-                // cache image dimensions to null, so it will be removed permanently from the DOM
-                $this->cacheImageSize($src, null, null);
             }
 
             $html = $dom->save();

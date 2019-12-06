@@ -32,3 +32,8 @@
 ## 1.0.8 - 2019-05-03
 ### Fixed
 - Filter unsuported tags [align, hspace, vspace, allowfullscreen, allowtransparency]
+
+
+## 1.0.9 - 2019-12-06
+### Fixed
+- Fixed blank image tags. Add check for blank src=""
