@@ -4,7 +4,7 @@ Matt Adams's [Amplify plugin](https://github.com/adamsmt/amplify) ported to Craf
 
 ## Install
 
-- Install with Composer via: ``composer require balazscsaba2006/amplify``
+- Install with Composer via: ``composer require trendyminds/amplify``
 - Navigate to `Settings -> Plugins` and click the "Install" button
 
 ## Features
