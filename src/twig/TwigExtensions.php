@@ -8,13 +8,10 @@ use FasterImage\FasterImage;
  * TwigExtensions class
  *
  * @author    Balazs Csaba <csaba.balazs@humandirect.eu>
- * @copyright 2018 Human Direct
+ * @copyright 2022 Human Direct
  */
 class TwigExtensions extends \Twig_Extension
 {
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return 'Amplify';
@@ -22,8 +19,6 @@ class TwigExtensions extends \Twig_Extension
 
     /**
      * Makes the filters available to the template context
-     *
-     * @return array
      */
     public function getFilters(): array
     {
@@ -33,10 +28,7 @@ class TwigExtensions extends \Twig_Extension
     }
 
     /**
-     * @param string $html
-     * @param bool   $smartImages
-     *
-     * @return mixed|null|string|string[]
+     * @return string|string[]|null
      */
     public function amplifyFilter(string $html, bool $smartImages = true)
     {
@@ -55,17 +47,23 @@ class TwigExtensions extends \Twig_Extension
         // strips out stuff in brackets
         $html = preg_replace('#\s*\[.+\]\s*#U', ' ', $html);
 
+        // strips out align tags
+        $html = preg_replace('/align="[^"]*"|align/', ' ', $html);
+
+        // strips out hspace and vspace tags
+        $html = preg_replace('/hspace="[^"]*"|hspace|vspace="[^"]*"|vspace/', ' ', $html);
+
+        // strips out allowfullscreen and allowtransparency tags
+        $html = preg_replace('/allowfullscreen="[^"]*"|allowfullscreen|allowtransparency="[^"]*"|allowtransparency/', ' ', $html);
+
         // removes empty paragraphs
         $pattern = "/<p[^>]*><\\/p[^>]*>/";
-        $html = preg_replace($pattern, '', $html);
 
-        return $html;
+        return preg_replace($pattern, '', $html);
     }
 
     /**
-     * @param string $html
-     *
-     * @return mixed|null|string|string[]
+     * @return string|string[]|null
      */
     protected function amplifyIframes(string $html)
     {
@@ -83,8 +81,8 @@ class TwigExtensions extends \Twig_Extension
             $tmpSrc = $src = $source[1];
 
             if ($src && $parsed = parse_url($src)) {
-                if (array_key_exists('scheme', $parsed) && 'https' !== $parsed['scheme']) {
-                    $tmpSrc = str_replace($parsed['scheme'], 'https://', $tmpSrc);
+                if (array_key_exists('scheme', $parsed) && 'https://' !== $parsed['scheme']) {
+                    $tmpSrc = str_replace($parsed['scheme'], 'https', $tmpSrc);
                 } else {
                     $tmpSrc = sprintf('https://%s', implode('', $parsed));
                 }
@@ -104,10 +102,7 @@ class TwigExtensions extends \Twig_Extension
     }
 
     /**
-     * @param string $html
-     * @param bool $smartImages
-     *
-     * @return mixed|null|string|string[]
+     * @return string|string[]|null
      */
     protected function amplifyImages(string $html, bool $smartImages)
     {
@@ -118,8 +113,12 @@ class TwigExtensions extends \Twig_Extension
                 return $html;
             }
 
-            foreach ($dom->find('img') as $key => $img) {
+            foreach ($dom->find('img') as $img) {
                 $src = $img->src;
+                if (!isset($src) || !$src) {
+                    continue;
+                }
+
                 // remove auto-generated asset transform param
                 $src = preg_replace('~(\?|&)x=[^&]*~', '$1', $src);
 
@@ -130,9 +129,7 @@ class TwigExtensions extends \Twig_Extension
                     if (!$size) {
                         continue;
                     }
-
-                    $width = $size[0];
-                    $height = $size[1];
+                    [$width, $height] = $size;
 
                     // no dimensions should remove this image from DOM permanently
                     if (!$width || !$height) {
@@ -158,9 +155,7 @@ class TwigExtensions extends \Twig_Extension
 
                 // read dimensions from image resource
                 if ($size = $this->readImageSize($src)) {
-                    $width = $size[0];
-                    $height = $size[1];
-
+                    [$width, $height] = $size;
                     $this->setImageSize($img, $width, $height);
                     continue;
                 }
@@ -176,7 +171,7 @@ class TwigExtensions extends \Twig_Extension
             $html = $dom->save();
         }
 
-        // delete cropable elements
+        // delete croppable elements
         foreach ($cropKeys as $cropKey) {
             $html = preg_replace('/CROPSTART' . $cropKey . '[\s\S]+CROPEND' . $cropKey . '/', '', $html);
         }
@@ -193,15 +188,7 @@ class TwigExtensions extends \Twig_Extension
         return $html;
     }
 
-    /**
-     * @param object $img
-     * @param int    $width
-     * @param int    $height
-     * @param bool   $setCache
-     *
-     * @return object
-     */
-    private function setImageSize($img, $width, $height, $setCache = true)
+    private function setImageSize(object $img, int $width, int $height, bool $setCache = true): void
     {
         $layout = ($width < 200) ? 'fixed' : 'responsive';
         $img->width = $width;
@@ -212,26 +199,14 @@ class TwigExtensions extends \Twig_Extension
             $this->cacheImageSize($img->src, $width, $height);
         }
 
-        return $img;
     }
 
-    /**
-     * @param string $key
-     * @param int    $width
-     * @param int    $height
-     * @param int    $expire | Defaults to 604800 (1 week)
-     */
-    private function cacheImageSize($key, $width, $height, $expire = 604800)
+    private function cacheImageSize(string $key, int $width, int $height, int $expire = 604800): void
     {
         \Craft::$app->cache->set(hash('crc32', $key), [$width, $height], $expire);
     }
 
-    /**
-     * @param string $url
-     *
-     * @return string|null
-     */
-    private function readImageSize(string $url)
+    private function readImageSize(string $url): ?string
     {
         $client = new FasterImage();
 
