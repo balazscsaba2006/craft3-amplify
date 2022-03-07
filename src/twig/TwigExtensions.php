@@ -114,6 +114,9 @@ class TwigExtensions extends \Twig_Extension
         $cropKeys = [];
         if ($smartImages) {
             $dom = str_get_html($html);
+            if (false === $dom) {
+                return $html;
+            }
 
             foreach ($dom->find('img') as $key => $img) {
                 $src = $img->src;
