@@ -26,8 +26,8 @@
     }
   ],
   "require": {
-    "php": ">=7.4",
-    "craftcms/cms": "^3.0.0",
+    "php": "^8.0.2|^9.0",
+    "craftcms/cms": "^4.0.0",
     "fasterimage/fasterimage": "^1.5"
   },
   "repositories": [
@@ -51,5 +51,8 @@
     "hasCpSection": false,
     "changelogUrl": "https://raw.githubusercontent.com/balazscsaba2006/craft3-amplify/master/CHANGELOG.md",
     "class": "humandirect\\amplify\\Amplify"
+  },
+  "require-dev": {
+    "craftcms/rector": "dev-main"
   }
 }

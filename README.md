@@ -1,7 +1,7 @@
 Use https://github.com/trendyminds/craft-amplify/ for compatibility with PHP 7.3.
-# Amplify for Craft3
+# Amplify for Craft 4
 
-Matt Adams's [Amplify plugin](https://github.com/adamsmt/amplify) ported to Craft 3, improved to support responsive images and iframes.
+Matt Adams's [Amplify plugin](https://github.com/adamsmt/amplify) ported to Craft 3 (<v2.0) and Craft 4 (>= v2.0), improved to support responsive images and iframes.
 
 ## Install
 

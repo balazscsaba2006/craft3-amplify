@@ -3,6 +3,7 @@
 namespace humandirect\amplify\twig;
 
 use FasterImage\FasterImage;
+use Twig\TwigFilter;
 
 /**
  * TwigExtensions class
@@ -10,7 +11,7 @@ use FasterImage\FasterImage;
  * @author    Balazs Csaba <csaba.balazs@humandirect.eu>
  * @copyright 2022 Human Direct
  */
-class TwigExtensions extends \Twig_Extension
+class TwigExtensions extends \Twig\Extension\AbstractExtension
 {
     public function getName(): string
     {
@@ -23,7 +24,7 @@ class TwigExtensions extends \Twig_Extension
     public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter('amplify', [$this, 'amplifyFilter']),
+            new TwigFilter('amplify', [$this, 'amplifyFilter']),
         ];
     }
 

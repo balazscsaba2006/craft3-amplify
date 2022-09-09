@@ -9,19 +9,19 @@ use humandirect\amplify\twig\TwigExtensions;
  * Amplify class
  *
  * @author    Balazs Csaba <csaba.balazs@humandirect.eu>
- * @copyright 2018 Human Direct
+ * @copyright 2022 Human Direct
  */
 class Amplify extends Plugin
 {
     /**
      * @var Amplify
      */
-    public static $plugin;
+    public static Amplify $plugin;
 
     /**
      * Initialize plugin.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         self::$plugin = $this;
