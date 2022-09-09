@@ -206,7 +206,7 @@ class TwigExtensions extends \Twig_Extension
         \Craft::$app->cache->set(hash('crc32', $key), [$width, $height], $expire);
     }
 
-    private function readImageSize(string $url): ?string
+    private function readImageSize(string $url): ?array
     {
         $client = new FasterImage();
 
