@@ -701,8 +701,11 @@ class simple_html_dom_node
 
             // convert to lowercase
             if ($this->dom->lowercase) {
-                $tag = strtolower($tag);
-                $key = strtolower($key);
+                // ?? '' because PHP 8.1+ deprecates passing null to strtolower(). Both are null for a
+                // selector with no tag or no attribute. Upstream simple_html_dom 1.5 is from 2012 and
+                // unmaintained, so this is fixed in the vendored copy.
+                $tag = strtolower($tag ?? '');
+                $key = strtolower($key ?? '');
             }
             //elements that do NOT have the specified attribute
             if (isset($key[0]) && $key[0] === '!') {

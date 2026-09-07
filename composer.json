@@ -1,6 +1,6 @@
 {
   "name": "balazscsaba2006/amplify",
-  "description": "Twig filter for the Craft CMS 3 to optimize rich text content for Google AMP.",
+  "description": "Twig filter for Craft CMS to optimize rich text content for Google AMP.",
   "type": "craft-plugin",
   "keywords": [
     "craft",
@@ -26,8 +26,8 @@
     }
   ],
   "require": {
-    "php": "^8.0.2|^9.0",
-    "craftcms/cms": "^4.0.0",
+    "php": "^8.2|^9.0",
+    "craftcms/cms": "^4.0.0|^5.0.0",
     "fasterimage/fasterimage": "^1.5"
   },
   "repositories": [

@@ -44,3 +44,18 @@
 ## 1.0.11 - 2022-03-07
 ### Fixed
 - Call to a member function find() on bool on \twig\TwigExtensions::amplifyImages
+
+## 2.0.0 - 2022-09-09
+### Added
+- Craft 4 support
+
+## 2.1.0 - 2026-09-07
+### Added
+- Craft 5 support. `craftcms/cms` widened to `^4.0.0|^5.0.0`; the plugin uses only
+  `craft\base\Plugin` and a Twig `AbstractExtension`, neither of which changed in Craft 5.
+### Changed
+- Minimum PHP raised to 8.2, matching Craft 5.
+### Fixed
+- `lib/simple_html_dom.php` passed null to `strtolower()` for selectors with no tag or no
+  attribute, which PHP 8.1+ deprecates. Upstream is version 1.5 from 2012 and unmaintained,
+  so this is fixed in the vendored copy.
