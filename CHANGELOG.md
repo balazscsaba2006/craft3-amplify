@@ -59,3 +59,9 @@
 - `lib/simple_html_dom.php` passed null to `strtolower()` for selectors with no tag or no
   attribute, which PHP 8.1+ deprecates. Upstream is version 1.5 from 2012 and unmaintained,
   so this is fixed in the vendored copy.
+
+## 2.1.1 - 2026-09-08
+### Fixed
+- Reverted the PHP floor to `^8.0.2|^9.0`. 2.1.0 raised it to `^8.2` to match Craft 5, but the
+  plugin's own code does not need 8.2 and `craftcms/cms ^5.0` already enforces it. The higher
+  floor made the plugin uninstallable on a Craft 4 project pinned below 8.2.
