@@ -93,3 +93,14 @@
   unreadable image takes down the whole AMP page. It now returns null, which the caller already
   handles by dropping the image from the document. Also reported in #9.
 
+## 2.1.4 - 2026-09-10
+### Fixed
+- 2.1.3 replaced one crash with another. Making `readImageSize()` return null for an unreadable
+  image finally reached the line that caches that fact, `cacheImageSize($src, null, null)`, and
+  that method declared `int $width, int $height`, so the page died on a `TypeError` instead of a
+  `?array` one. The line had been there for years and had never run, because the old code
+  returned the truthy string `'failed'` and never took the failure branch. The parameters are now
+  nullable, which is what `[null, null]` in the cache has always meant and what the cache-hit
+  branch already tests for. Measured on a production site: 127 of 173 AMP pages answered 500
+  under 2.1.3 and answer 200 with this change.
+

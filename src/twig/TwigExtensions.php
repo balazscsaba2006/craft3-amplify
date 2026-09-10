@@ -221,7 +221,14 @@ class TwigExtensions extends \Twig\Extension\AbstractExtension
 
     }
 
-    private function cacheImageSize(string $key, int $width, int $height, int $expire = 604800): void
+    /**
+     * Nullable on purpose. `[null, null]` is the cached form of "this image has no readable
+     * dimensions", written by the caller so the next render drops the image without fetching it
+     * again, and the cache-hit branch above already tests for it. With `int` here that call was a
+     * `TypeError`, which 2.1.3 turned from unreachable into the common path when `readImageSize()`
+     * started returning null for an unreadable image instead of the string `'failed'`.
+     */
+    private function cacheImageSize(string $key, ?int $width, ?int $height, int $expire = 604800): void
     {
         \Craft::$app->cache->set(hash('crc32', $key), [$width, $height], $expire);
     }
