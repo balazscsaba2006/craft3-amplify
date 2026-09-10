@@ -65,3 +65,15 @@
 - Reverted the PHP floor to `^8.0.2|^9.0`. 2.1.0 raised it to `^8.2` to match Craft 5, but the
   plugin's own code does not need 8.2 and `craftcms/cms ^5.0` already enforces it. The higher
   floor made the plugin uninstallable on a Craft 4 project pinned below 8.2.
+
+## 2.1.2 - 2026-09-10
+### Fixed
+- The plugin built the Twig environment while it was still loading. `init()` read
+  `view->twig` to add the Twig extension, and plugins load during application bootstrap, so
+  Twig was created before Craft finished initialising. Craft logs
+  "Twig instantiated before Craft is fully initialized" every time that happens, on every web
+  request and every console command; on one site that was about 3,400 warnings a day, which
+  buried real errors. Switched to `view->registerTwigExtension()`, which stores the extension
+  and hands it to Twig when Twig is actually created. Same behaviour, nothing built early, and
+  no change to the `craftcms/cms` constraint since the method exists in Craft 3, 4 and 5.
+
