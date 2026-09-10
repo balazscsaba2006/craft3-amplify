@@ -77,3 +77,19 @@
   and hands it to Twig when Twig is actually created. Same behaviour, nothing built early, and
   no change to the `craftcms/cms` constraint since the method exists in Craft 3, 4 and 5.
 
+## 2.1.3 - 2026-09-10
+### Fixed
+- Iframes with a non-numeric width or height produced invalid AMP. `amp-iframe` requires
+  numeric dimensions, and because the filter sets `layout="responsive"` those numbers are an
+  aspect ratio rather than a size, so `width="90%"` carries nothing usable and AMP rejects the
+  document. The old check only added dimensions when they were **missing**, so a percentage was
+  found and left in place. Any non-numeric value is now replaced with the default, and each
+  `amp-iframe` on the page is handled separately instead of the first one's state deciding for
+  all of them. Reported in #9.
+- An image whose size could not be determined broke the page. FasterImage reports failure by
+  setting `size` to the string `'failed'` rather than returning null, and that string reached the
+  caller: older versions read `[0]` and `[1]` off it and emitted `width="f" height="a"`, and
+  since the return type was declared `?array` it throws a `TypeError` instead, so a single
+  unreadable image takes down the whole AMP page. It now returns null, which the caller already
+  handles by dropping the image from the document. Also reported in #9.
+

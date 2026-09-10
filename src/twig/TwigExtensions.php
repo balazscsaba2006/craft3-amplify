@@ -91,13 +91,32 @@ class TwigExtensions extends \Twig\Extension\AbstractExtension
             }
         }
 
-        if (!preg_match('/width=[\'|"]([^\"]*)[\'|"]/i', $match, $matches)) {
-            $html = preg_replace('/(<amp-iframe\b[^><]*)>/i', '$1 width="500">', $html);
-        }
+        // amp-iframe requires numeric width and height. Because layout="responsive" is set above,
+        // those numbers are an aspect ratio rather than a size, so a percentage carries nothing
+        // usable and AMP rejects the document outright. Anything non-numeric is replaced, not just
+        // anything missing: `width="90%"` is valid HTML, so the old check found it and left it.
+        //
+        // Per tag rather than from the first match, so a page with several iframes gets each one
+        // fixed instead of the first one's dimensions being applied to all of them.
+        $html = preg_replace_callback('/<amp-iframe\b[^><]*>/i', static function (array $tag): string {
+            $iframe = $tag[0];
 
-        if (!preg_match('/height=[\'|"]([^\"]*)[\'|"]/i', $match, $matches)) {
-            $html = preg_replace('/(<amp-iframe\b[^><]*)>/i', '$1 height="281">', $html);
-        }
+            foreach (['width' => 500, 'height' => 281] as $attribute => $default) {
+                if (preg_match('/\b' . $attribute . '\s*=\s*([\'"])(.*?)\1/i', $iframe, $found)) {
+                    if (ctype_digit(trim($found[2]))) {
+                        continue;
+                    }
+
+                    $iframe = str_replace($found[0], $attribute . '="' . $default . '"', $iframe);
+
+                    continue;
+                }
+
+                $iframe = preg_replace('/(<amp-iframe\b)/i', '$1 ' . $attribute . '="' . $default . '"', $iframe, 1);
+            }
+
+            return $iframe;
+        }, $html);
 
         return $html;
     }
@@ -217,6 +236,14 @@ class TwigExtensions extends \Twig\Extension\AbstractExtension
             return null;
         }
 
-        return reset($result)['size'];
+        $size = reset($result)['size'] ?? null;
+
+        // FasterImage reports that it could not read an image by setting `size` to the string
+        // 'failed', not by returning null or throwing. That string used to reach the caller, which
+        // read $size[0] and $size[1] off it and emitted width="f" height="a"; with a declared
+        // ?array return type it now throws a TypeError instead, so one unreadable image takes down
+        // the whole AMP page. Neither is acceptable: an image whose size cannot be determined has
+        // no dimensions, which is what null means here, and the caller already knows how to drop it.
+        return \is_array($size) && isset($size[0], $size[1]) ? $size : null;
     }
 }
